@@ -8,9 +8,9 @@ import time
 import shutil
 from pathlib import Path
 
-from flowwizard.config_loader import load_config, detect_project_type
-from flowwizard.project_tree_generator import ProjectTreeGenerator
-from flowwizard.agent_generator import generate_agent_files
+from fw.config_loader import load_config, detect_project_type
+from fw.project_tree_generator import ProjectTreeGenerator
+from fw.agent_generator import generate_agent_files
 
 app = typer.Typer()
 console = Console()

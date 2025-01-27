@@ -39,8 +39,7 @@ cd Flowwizard
 ### 2. Set Up the Environment (Using uv)
 
 ```bash
-uv venv
-uv pip install -r flowwizard/requirements.txt
+uv sync
 ```
 
 Alternatively, use a standard Python virtual environment:
@@ -48,7 +47,7 @@ Alternatively, use a standard Python virtual environment:
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -r flowwizard/requirements.txt
+pip install -r requirements.txt
 ```
 
 ### 3. Run the CLI in Interactive Mode
