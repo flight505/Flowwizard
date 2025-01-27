@@ -1,0 +1,5 @@
+typer
+rich
+questionary
+pyyaml
+gitignore-parser

@@ -1,0 +1,50 @@
+project_title: "FlowWizard Project"
+
+# Example universal config for Node + Python, fully expanded:
+tree_focus:
+  - "app"
+  - "api"
+  - "src"
+  - "scripts"
+  - "tests"
+  # Add more focus if you want...
+
+important_dirs:
+  - "app"
+  - "api"
+  - "src"
+  - "scripts"
+  - "tests"
+  - "lib"
+  - "utils"
+  - "public"
+  - "notebooks"
+  - "data"
+  - "configs"
+
+exclude_dirs:
+  - "node_modules"
+  - "dist"
+  - "build"
+  - ".next"
+  - "venv"
+  - "env"
+  - "__pycache__"
+  - ".git"
+  - ".ipynb_checkpoints"
+
+include_extensions:
+  - ".py"
+  - ".js"
+  - ".ts"
+  - ".jsx"
+  - ".tsx"
+  - ".ipynb"
+  - ".md"
+  - ".yaml"
+  - ".yml"
+  - ".json"
+  - ".css"
+  - ".html"
+
+max_depth: 3
