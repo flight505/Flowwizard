@@ -9,11 +9,11 @@ import sys
 import time
 import shutil
 from pathlib import Path
-import yaml
 
-from fw.config_loader import load_config, detect_project_type
+from fw.config_loader import load_config, detect_project_types, create_default_config, save_config
 from fw.project_tree_generator import ProjectTreeGenerator
 from fw.agent_generator import generate_agent_files
+from fw.profiles import list_profiles, LANGUAGE_PROFILES
 
 app = typer.Typer()
 console = Console()
@@ -101,63 +101,66 @@ def _generate_agents():
             return
 
         config_dir = Path(__file__).parent
-        config_file = config_dir / "config.yaml"
+        config_file = project_dir / "config.yaml"
         
         # Detect project types
-        detected_types = detect_project_type(project_dir)
-        if detected_types:
-            type_list = ", ".join(f"[bold green]{t}[/]" for t in detected_types)
-            console.print(f"\n[cyan]🔍 Detected project types:[/] {type_list}")
-        else:
-            console.print("\n[yellow]⚠️  No specific project type detected, using default settings[/]")
+        detected_types = detect_project_types(project_dir)
         
-        # Load config with detected profiles
-        config = load_config(config_file, project_dir)
+        # Ask user about profiles
+        console.print("\n[bold cyan]📦 Detected Project Types:[/]")
+        for lang in detected_types:
+            console.print(f"  [green]✓[/] {LANGUAGE_PROFILES[lang]['name']}")
         
-        # Allow manual profile selection
-        with open(config_file, 'r', encoding='utf-8') as f:
-            full_config = yaml.safe_load(f)
+        use_detected = questionary.confirm(
+            "\nUse detected profiles?",
+            default=True,
+            style=questionary.Style([
+                ('qmark', 'fg:cyan bold'),
+                ('question', 'bold'),
+            ])
+        ).ask()
         
-        available_profiles = list(full_config.get("language_profiles", {}).keys())
-        if available_profiles:
-            should_customize = questionary.confirm(
-                "Would you like to customize the language profiles?",
-                default=False,
+        if use_detected is None:  # User pressed Ctrl+C
+            console.print("\n[yellow]↩️ Returning to main menu...[/]\n")
+            return
+        
+        if not use_detected:
+            available_profiles = list_profiles()
+            selected_profiles = questionary.checkbox(
+                "Select language profiles to use:",
+                choices=[
+                    questionary.Choice(p, checked=(p in detected_types))
+                    for p in available_profiles
+                ],
                 style=questionary.Style([
                     ('qmark', 'fg:cyan bold'),
                     ('question', 'bold'),
+                    ('pointer', 'fg:cyan bold'),
+                    ('highlighted', 'fg:cyan bold'),
+                    ('checked', 'fg:green'),
                 ])
             ).ask()
             
-            if should_customize:
-                selected_profiles = questionary.checkbox(
-                    "Select additional language profiles to include:",
-                    choices=[
-                        questionary.Choice(
-                            profile,
-                            checked=profile in detected_types,
-                            name=f"{full_config['language_profiles'][profile]['name']} - {full_config['language_profiles'][profile]['description']}"
-                        )
-                        for profile in available_profiles
-                    ],
-                    style=questionary.Style([
-                        ('qmark', 'fg:cyan bold'),
-                        ('question', 'bold'),
-                        ('pointer', 'fg:cyan bold'),
-                        ('highlighted', 'fg:cyan bold'),
-                        ('checked', 'fg:green'),
-                    ])
-                ).ask()
-                
-                if selected_profiles:
-                    # Reload config with selected profiles
-                    config = full_config.get("default_settings", {}).copy()
-                    for profile in selected_profiles:
-                        profile_settings = full_config["language_profiles"][profile]
-                        config = merge_profile_settings(config, profile_settings)
-                    config["detected_types"] = selected_profiles
-                    config["max_depth"] = full_config.get("max_depth", 3)
-
+            if selected_profiles is None:  # User pressed Ctrl+C
+                console.print("\n[yellow]↩️ Returning to main menu...[/]\n")
+                return
+            
+            if not selected_profiles:  # No profiles selected
+                console.print("\n[bold red]❌ Error: At least one profile must be selected.[/]")
+                return
+        else:
+            selected_profiles = detected_types
+        
+        # Create default config if it doesn't exist
+        if not config_file.exists():
+            config = create_default_config(project_dir, selected_profiles)
+            save_config(config, config_file)
+            console.print(f"\n[bold green]✨ Created default config.yaml in {project_dir}[/]")
+        
+        # Load config (will merge with profiles)
+        config = load_config(config_file, project_dir)
+        
+        # Continue with existing flow...
         max_depth_str = questionary.text(
             "Enter max directory depth (default 3, Ctrl+C to go back):",
             style=questionary.Style([

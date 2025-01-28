@@ -1,131 +1,50 @@
 project_title: "FlowWizard Project"
 
-# Language profiles for different project types
-language_profiles:
-  python:
-    name: "Python"
-    description: "Python projects with standard structure"
-    tree_focus:
-      - "src"
-      - "tests"
-      - "scripts"
-    important_dirs:
-      - "src"
-      - "tests"
-      - "scripts"
-      - "notebooks"
-      - "data"
-      - "configs"
-    exclude_dirs:
-      - "venv"
-      - "env"
-      - "__pycache__"
-      - ".pytest_cache"
-      - "*.egg-info"
-      - "dist"
-      - "build"
-    include_extensions:
-      - ".py"
-      - ".ipynb"
-      - ".pyi"
-      - ".pyx"
-      - ".yaml"
-      - ".yml"
-      - ".toml"
-      - ".md"
-    file_patterns:
-      - "requirements.txt"
-      - "setup.py"
-      - "pyproject.toml"
-      - "Pipfile"
-      - "poetry.lock"
+# Example universal config for Node + Python, fully expanded:
+tree_focus:
+  - "app"
+  - "api"
+  - "src"
+  - "scripts"
+  - "tests"
+  # Add more focus if you want...
 
-  node:
-    name: "Node.js"
-    description: "JavaScript/TypeScript projects with Node.js"
-    tree_focus:
-      - "src"
-      - "app"
-      - "components"
-      - "pages"
-    important_dirs:
-      - "src"
-      - "app"
-      - "components"
-      - "pages"
-      - "public"
-      - "styles"
-      - "utils"
-      - "lib"
-      - "api"
-    exclude_dirs:
-      - "node_modules"
-      - ".next"
-      - "dist"
-      - "build"
-      - "coverage"
-    include_extensions:
-      - ".js"
-      - ".ts"
-      - ".jsx"
-      - ".tsx"
-      - ".json"
-      - ".css"
-      - ".scss"
-      - ".html"
-    file_patterns:
-      - "package.json"
-      - "tsconfig.json"
-      - "next.config.js"
-      - "webpack.config.js"
+important_dirs:
+  - "app"
+  - "api"
+  - "src"
+  - "scripts"
+  - "tests"
+  - "lib"
+  - "utils"
+  - "public"
+  - "notebooks"
+  - "data"
+  - "configs"
 
-  go:
-    name: "Go"
-    description: "Go projects with standard layout"
-    tree_focus:
-      - "cmd"
-      - "internal"
-      - "pkg"
-    important_dirs:
-      - "cmd"
-      - "internal"
-      - "pkg"
-      - "api"
-      - "web"
-      - "docs"
-      - "test"
-    exclude_dirs:
-      - "vendor"
-      - "bin"
-    include_extensions:
-      - ".go"
-      - ".mod"
-      - ".sum"
-      - ".tmpl"
-    file_patterns:
-      - "go.mod"
-      - "go.sum"
-      - "Makefile"
+exclude_dirs:
+  - "node_modules"
+  - "dist"
+  - "build"
+  - ".next"
+  - "venv"
+  - "env"
+  - "__pycache__"
+  - ".git"
+  - ".ipynb_checkpoints"
 
-# Default settings (used when no profile is selected or for mixed projects)
-default_settings:
-  tree_focus:
-    - "src"
-    - "tests"
-    - "scripts"
-  important_dirs:
-    - "src"
-    - "tests"
-    - "scripts"
-    - "docs"
-  exclude_dirs:
-    - ".git"
-    - ".ipynb_checkpoints"
-  include_extensions:
-    - ".md"
-    - ".txt"
-    - ".json"
-    - ".yaml"
-    - ".yml"
+include_extensions:
+  - ".py"
+  - ".js"
+  - ".ts"
+  - ".jsx"
+  - ".tsx"
+  - ".ipynb"
+  - ".md"
+  - ".yaml"
+  - ".yml"
+  - ".json"
+  - ".css"
+  - ".html"
 
 max_depth: 3
