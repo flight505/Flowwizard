@@ -71,7 +71,7 @@ You’ll see an interactive menu asking whether you want to Generate Agents or C
 Don’t want to install FlowWizard permanently? You can use uvx to install it from Git and run it on the fly, removing it afterward (but caching for faster future runs):
 
 ```bash
-uvx --from git+https://github.com/flight505/Flowwizard@main flowwizard main-menu
+uvx --from git+https://github.com/flight505/Flowwizard fw
 ```
 
 This command will:
